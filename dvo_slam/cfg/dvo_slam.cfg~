@@ -4,8 +4,7 @@ PACKAGE='dvo_slam'
 import os
 
 
-from dynamic_reconfigure.parameter_generator_catkin import *
-
+from dynamic_reconfigure.parameter_generator import *
 
 me = os.path.realpath(__file__)
 cpp_header = os.path.realpath(os.path.join(os.path.dirname(me), "cpp", PACKAGE, "KeyframeSlamConfig.h"))
