@@ -4,13 +4,11 @@ project(dvo_core)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-
 find_package(catkin REQUIRED COMPONENTS
   cmake_modules
   sophus
 )
-add_definitions(-msse)
-add_definitions(-msse3)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -81,8 +79,8 @@ add_definitions(-msse3)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES dvo_core dvo_visualization
+#  INCLUDE_DIRS include
+#  LIBRARIES dvo_core
   CATKIN_DEPENDS cmake_modules sophus
 #  DEPENDS system_lib
 )
@@ -91,21 +89,21 @@ catkin_package(
 ## Build ##
 ###########
 
-include_directories(include)
 # Eigen3 library
 find_package(Eigen REQUIRED)
 include_directories(${Eigen_INCLUDE_DIRS})
 
 # VTK library
 find_package(VTK REQUIRED)
-#include_directories(${VTK_INCLUDE_DIRS})
+include_directories(${VTK_INCLUDE_DIRS})
 
 # Eigen3 library
 find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(${Eigen_INCLUDE_DIRS})
 
+# VTK library
 find_package(PCL REQUIRED)
-include_directories(${PCL_INCLUDE_DIRS})
+include_directories(${VTK_INCLUDE_DIRS})
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
@@ -119,9 +117,9 @@ include_directories(
     src/core/interpolation.cpp
     src/core/intrinsic_matrix.cpp
     src/core/least_squares.cpp
-	src/core/math_sse.cpp
+    src/core/math_sse.cpp
     src/core/rgbd_image.cpp
-	src/core/rgbd_image_sse.cpp
+    src/core/rgbd_image_sse.cpp
     src/core/point_selection.cpp
     src/core/surface_pyramid.cpp
     src/core/weight_calculation.cpp
@@ -151,14 +149,10 @@ include_directories(
 ## Specify libraries to link a library or executable target against
  target_link_libraries(dvo_core
    ${catkin_LIBRARIES}
-   ${PCL_LIBRARIES}
-   tbb
  )
 
  target_link_libraries(dvo_visualization
    ${catkin_LIBRARIES} dvo_core
-   ${PCL_LIBRARIES}
-   tbb
  )
 
 #############

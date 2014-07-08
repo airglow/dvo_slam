@@ -15,7 +15,8 @@ IF (CMAKE_COMPILER_IS_GNUCXX )
    SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
    SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG ")
 
-  ADD_DEFINITIONS("-Wall -Werror -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unknown-pragmas ")
+  ADD_DEFINITIONS("-Wall -Werror -Wno-unused-variable
+                   -Wno-unused-but-set-variable -Wno-unknown-pragmas ")
 ENDIF()
 
 ################################################################################
@@ -30,14 +31,9 @@ set( sophus_INCLUDE_DIR ${PROJECT_SOURCE_DIR} )
 
 ################################################################################
 
-find_package( cmake_modules REQUIRED )
-find_package( Eigen REQUIRED )
-INCLUDE_DIRECTORIES( ${EIGEN_INCLUDE_DIR} )
-SET( Sophus_INCLUDE_DIR ${sophus_INCLUDE_DIR} ${EIGEN_INCLUDE_DIR} )
-
-catkin_package(
-  INCLUDE_DIRS include
-)
+find_package( Eigen3 REQUIRED )
+INCLUDE_DIRECTORIES( ${EIGEN3_INCLUDE_DIR} )
+SET( Sophus_INCLUDE_DIR ${sophus_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} )
 
 SET (SOURCE_DIR "sophus")
 
