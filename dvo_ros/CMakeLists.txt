@@ -95,7 +95,7 @@ generate_dynamic_reconfigure_options(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS include
 #  LIBRARIES dvo_ros
   CATKIN_DEPENDS cv_bridge dvo_core dynamic_reconfigure eigen_conversions image_transport interactive_markers message_filters nodelet pcl_ros roscpp sensor_msgs tf tf_conversions
 #  DEPENDS system_lib
@@ -105,13 +105,13 @@ catkin_package(
 ## Build ##
 ###########
 
+include_directories(include)
 # Eigen3 library
 find_package(Eigen REQUIRED)
 include_directories(${Eigen_INCLUDE_DIRS})
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
- include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
@@ -140,6 +140,11 @@ include_directories(
  add_dependencies(dvo_ros dvo_ros_gencfg)
 
 ## Specify libraries to link a library or executable target against
+
+ target_link_libraries(dvo_ros
+   ${catkin_LIBRARIES}
+ )
+
  target_link_libraries(camera_tracker_nodelet
    ${catkin_LIBRARIES} dvo_ros
  )

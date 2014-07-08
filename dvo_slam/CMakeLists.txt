@@ -1,27 +1,64 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(dvo_slam)
 
+add_definitions(-msse)
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  cmake_modules
-  cv_bridge
+  cmake_modules cv_bridge
+  tf_conversions
   dvo_core
   dvo_ros
   dynamic_reconfigure
   image_transport
   interactive_markers
-  libg2o
+  #libg2o
   message_filters
   roscpp
   sensor_msgs
   visualization_msgs
+  sophus
 )
 
 ## System dependencies are found with CMake's conventions
- find_package(Boost REQUIRED COMPONENTS system thread bind signals2)
+ find_package(Boost REQUIRED COMPONENTS system thread)
+ #find_package(Boost REQUIRED COMPONENTS system thread bind signals2)
 
+#find_package(G2O REQUIRED)
+#find_package(G2O)
+
+set(G2O_LIBRARIES
+	g2o_cli
+	g2o_core
+	g2o_csparse_extension
+	g2o_ext_csparse
+	g2o_ext_freeglut_minimal
+	g2o_incremental
+	g2o_interactive
+	g2o_interface
+	g2o_opengl_helper
+	g2o_parser
+	g2o_simulator
+	g2o_solver_cholmod
+	g2o_solver_csparse
+	g2o_solver_dense
+	g2o_solver_eigen
+	g2o_solver_pcg
+	g2o_solver_slam2d_linear
+	g2o_solver_structure_only
+	g2o_stuff
+	g2o_types_data
+	g2o_types_icp
+	g2o_types_sba
+	g2o_types_sclam2d
+	g2o_types_sim3
+	g2o_types_slam2d
+	g2o_types_slam2d_addons
+	g2o_types_slam3d
+	g2o_types_slam3d_addons
+	)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -95,8 +132,8 @@ generate_dynamic_reconfigure_options(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES dvo_slam
-  CATKIN_DEPENDS cmake_modules cv_bridge dvo_core dvo_ros dynamic_reconfigure image_transport interactive_markers libg2o message_filters roscpp sensor_msgs visualization_msgs
+  LIBRARIES dvo_slam
+  CATKIN_DEPENDS cmake_modules cv_bridge dvo_core dvo_ros dynamic_reconfigure image_transport interactive_markers message_filters roscpp sensor_msgs visualization_msgs sophus
 #  DEPENDS system_lib
 )
 
@@ -104,21 +141,26 @@ catkin_package(
 ## Build ##
 ###########
 
+include_directories(include)
+include_directories(/usr/include/suitesparse)
 # VTK library
 find_package(VTK REQUIRED)
 include_directories(${VTK_INCLUDE_DIRS})
 
-find_package(tbb REQUIRED)
-include_directories(${VTK_INCLUDE_DIRS})
+#find_package(tbb REQUIRED)
+#include_directories(${VTK_INCLUDE_DIRS})
 
-find_package(Eigen REQUIRED)
-include_directories(${VTK_INCLUDE_DIRS})
+#find_package(Eigen REQUIRED)
+#include_directories(${VTK_INCLUDE_DIRS})
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-# include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+)
+
+include_directories(
+  ${G2O_INCLUDE_DIRS}
 )
 
 ## Declare a cpp library
@@ -156,10 +198,18 @@ add_executable(camera_keyframe_tracker   src/camera_keyframe_tracker_node.cpp)
 ## Specify libraries to link a library or executable target against
  target_link_libraries(dvo_slam
    ${catkin_LIBRARIES}
+   ${G2O_LIBRARIES}
+   dvo_ros
+   cxsparse 
+
  )
 
  target_link_libraries(camera_keyframe_tracker
    ${catkin_LIBRARIES}
+   ${G2O_LIBRARIES}
+   dvo_ros
+   dvo_slam
+   cxsparse
  )
 
 #############
