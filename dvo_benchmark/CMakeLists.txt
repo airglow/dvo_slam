@@ -69,8 +69,13 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(benchmark
+add_executable(benchmark_slam
      src/benchmark_slam.cpp
+)
+
+
+add_executable(benchmark
+     src/benchmark.cpp
 )
 
 #rosbuild_add_executable(experiment
@@ -81,6 +86,12 @@ target_link_libraries(benchmark
   vtkCommon
   ${catkin_LIBRARIES}
   ${G2O_LIBRARIES}
+)
+
+
+target_link_libraries(benchmark
+  vtkCommon
+  ${catkin_LIBRARIES}
 )
 
 # create output directory - just convenience for our users
