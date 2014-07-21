@@ -82,7 +82,7 @@ add_executable(benchmark
 #     src/experiment.cpp
 #)
 
-target_link_libraries(benchmark
+target_link_libraries(benchmark_slam
   vtkCommon
   ${catkin_LIBRARIES}
   ${G2O_LIBRARIES}
